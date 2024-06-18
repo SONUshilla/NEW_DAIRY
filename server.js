@@ -60,7 +60,6 @@ app.use(session({
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
     secure: false, // Set to true if using HTTPS
-    httpOnly: true, // Cookie accessible only by the web server
   }
 }));
 console.log("for commit");
