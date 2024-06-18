@@ -39,7 +39,16 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
-app.use(cors());
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow all origins
+    callback(null, true);
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(bodyParser.json({ limit: "10mb" })); // Adjust the limit as needed
 // Middleware to parse JSON bodies
@@ -59,10 +68,6 @@ console.log("for commit");
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-// Enable CORS
-app.use(cors({
-  origin: '*'
-}));
 app.use(helmet({
   contentSecurityPolicy: {
       directives: {
@@ -72,13 +77,7 @@ app.use(helmet({
       }
   }
 }));
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  next();
-});
+
 app.post('/entries/morning', (req, res) => {
   // Access the values submitted from the form
   const { date, weight, fat, price } = req.body;
